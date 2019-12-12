@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{title}}</title>
+    <link rel="stylesheet" type="text/css" href="/assets/maincss.css" />
+</head>
+<body>
+    <h1> {{title}} </h1>
+    <h4> <i>Finding your national representatives for: {{address}} </i></h4>
+    <h4> <i>This location is located in {{pols[2]["district"]}}</i></h4>
+    {% for eachpol in pols %}
+    <div class="container">
+        <div class="maininfo">
+            <h2> <i>{{eachpol["name"]}} </i> </h2>
+            <img src="{{eachpol["pic"]}}" alt={{eachpol["name"]}} width=150px>
+        </div>
+        <div class="row-info">
+            <div class="left-3">
+                <h3> Basic Information</h3>
+                <p> Party: {{eachpol["party"]}}</p>
+                <p> Chamber: {{eachpol["chamber"]}}</p>
+                <p> Title: {{eachpol["title"]}}</p>
+                <p> Next Election: {{eachpol["next_elec"]}}</p>
+            </div>
+            <div class="center-3">
+                <h3> Voting Information</h3>
+                <p> Number of Bills Sponosred: {{eachpol["sponsor"]}}</p>
+                <p> Number of Bills Co-Sponosred: {{eachpol["cosponsor"]}}</p>
+                <p> Number of Votes: {{eachpol["totalvotes"]}}</p>
+                <p> Votes With Party: {{eachpol["partyvotes"]}}%</p>
+            </div>
+            <div class="right-3">
+                <h3> Committees</h3>
+                    {% for eachrole in eachpol["comms"] %}
+                    <p>{{eachrole}} </p>
+                    {% endfor %}
+            </div>
+        </div>
+        <br>
+        <div class="row-contact">
+            <div class="left">
+            <h3> Contact Information</h3>
+            <p>Website: <a href="{{eachpol["url"]}}">{{eachpol["url"]}}</a> </p>
+            <p>Address: {{eachpol["office"]}}, Washington DC</p>
+            <p>Phone: {{eachpol["phone"]}}</p>
+            {% if eachpol["contact"] != None %}
+                <p>Contact Form: <a href="{{eachpol["contact"]}}">{{eachpol["contact"]}}</a> </p>
+            {% endif %}
+            <br>
+            </div>
+            <div class="right">
+            <h3> Social Media</h3>
+            {% if eachpol["facebook"] != None %}
+                <a href="http://www.facebook.com/{{eachpol["facebook"]}}"><img src= http://icons.iconarchive.com/icons/uiconstock/socialmedia/64/Facebook-icon.png></a>
+            {% endif %}
+            {% if eachpol["twitter"] != None %}
+                <a href="http://www.twitter.com/{{eachpol["twitter"]}}"><img src= http://icons.iconarchive.com/icons/xenatt/minimalism/64/App-Twitter-icon.png></a>
+            {% endif %}
+            {% if eachpol["youtube"] != None %}
+            <a href="http://www.youtube.com/{{eachpol["youtube"]}}"><img src= http://icons.iconarchive.com/icons/igh0zt/ios7-style-metro-ui/64/MetroUI-YouTube-Alt-2-icon.png></a>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>

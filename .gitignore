@@ -1,2 +1,8 @@
 # Google App Engine generated folder
 appengine-generated/
+
+#ignore all complied
+*.pyc
+
+#API Keys
+keys.py

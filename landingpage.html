@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Your Federal Representatives</title>
+    <link rel="stylesheet" type="text/css" href="/assets/landingcss.css" />
+</head>
+<body>
+    <h1> Meet Your Federal Representatives By {{info}}</h1>
+    <form id="useraddress" method="post" action="/">
+        <label for="address"><h3> Type in Your {{info}} Here: </h3> </label> 
+        <input id="address" type="text" name="address" placeholder="HouseNumber Street City State ZIP" />
+        <button type="submit" value="Submit">Go </button>
+    </form>
+</body>
+</html>
