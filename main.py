@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 #
-# this is a modified version of the Google App Engine Tutorial
 import webapp2, os, urllib2
 import json, logging
 import jinja2, urllib
@@ -43,8 +42,7 @@ def civicREST(address,
     funcdata = json.load(getdata)
     return funcdata
 
-#Calling the Civic Rest Function with a provided Address
-
+# Calls the Member List of Propublica to get Names and member IDS
 def memIdREST(congress = "senate"):
     url = "https://api.propublica.org/congress/v1/116/%s/members.json"%(congress)
     request = urllib2.Request(url, headers={"X-API-Key": keys.congress_key})
@@ -54,6 +52,7 @@ def memIdREST(congress = "senate"):
 
 memberiddict = {}
 
+# Makes a Dictionary with member names as key and IDs as values
 def putMeminDict(congress):
     allmemberinfo = memIdREST(congress)
     for eachmeminfo in allmemberinfo["results"][0]["members"]:
@@ -69,6 +68,7 @@ putMeminDict("house")
 
 def getPic(address):
     neededpics = []
+    # Calling the Civic Rest Function with a provided Address for Pictures
     polpics = civicREST(address)
     for eachpic in polpics["officials"][2:5]:
         if "photoUrl" in eachpic:
@@ -81,6 +81,7 @@ def getPic(address):
 def getCivicPols(address):
     neededids = []
     needpols = []
+    # Calling the Civic Rest Function with a provided Address for to find the 3 Representatives
     fullpoldet = civicREST(address)
     #Creating a list of all of their Senators and House Reps
     for eachsen in fullpoldet["officials"][2:4]:
@@ -93,7 +94,7 @@ def getCivicPols(address):
             name = name.split()[0] + " " + name.split()[-1]
         needpols.append("Rep. " + name)
 
-    # Getting the Member IDs of the 3 Politicians using the memberiddict dictionary in memids
+    # Getting the Member IDs of the 3 Politicians using the memberiddict dictionary
     for eachrep in needpols:
         neededids.append(memberiddict[eachrep])
     return neededids
@@ -109,6 +110,7 @@ def memInfo(memberId):
 def getPolInfo(neededids, address):
     pol_count = 0
     for allreps in neededids:
+        #Call Information on the specific Rep and saves certain data to a dictionary
         eachinfo = memInfo(allreps)
         pol_count += 1
         name = eachinfo["results"][0]["roles"][0]["short_title"] + " " + eachinfo["results"][0]["first_name"] + " " + \
@@ -152,21 +154,24 @@ def getPolInfo(neededids, address):
                      "facebook": facebook, "youtube": youtube, "cosponsor": cosponsor, "sponsor": sponsor,
                      "contact": contactform, "next_elec": nextelec, "phone": phone, "office": office, "totalvotes": totalvotes,
                      "partyvotes": partyvotes, "district": district, "chamber": chamber, "title": title, "pic": pic}
-
+    #List of the 3 politicians' information dictionaries
     pols = [pol_1, pol_2, pol_3]
 
-
+    # Dictionary of Items needed for the template
     neededvalues = {"title": "Your Federal Representatives", "pols": pols}
     return neededvalues
 
 class MainHandler(webapp2.RequestHandler):
     def genpage(self):
+        # Landing Page
         landingvalues = {"info": "Address"}
         landtemp = JINJA_ENVIRONMENT.get_template('landingpage.html')
         self.response.write(landtemp.render(landingvalues))
     def get(self):
+        #Calling the Landing Page first
         self.genpage()
     def post(self):
+        #Taking Address Imput and generating the 3 politicians Info using Jinja template
         address = self.request.get('address')
         reps = getCivicPols(address)
         neededvalues = getPolInfo(reps, address)
@@ -176,10 +181,6 @@ class MainHandler(webapp2.RequestHandler):
 
 
 application = webapp2.WSGIApplication([('/', MainHandler)], debug=True)
-
-
-
-
 
 
 
